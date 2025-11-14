@@ -3,13 +3,23 @@
 require('dotenv').config();
 
 const express = require('express');
+const path = require('path');
+
 const userRoutes = require('./routes/user.route');
+const productRoutes = require('./routes/product.route');
 
 const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json()); // JSON parsing middleware`
-app.use('/api/users', userRoutes); // user route middleware
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/users', userRoutes); // user route middleware
+app.use('/products', productRoutes); // product route middleware
+
+app.get('/', (req, res) => {
+	res.redirect('/products');
+});
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
