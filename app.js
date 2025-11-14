@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
+const { engine } = require('express-handlebars');
 
 const userRoutes = require('./routes/user.route');
 const productRoutes = require('./routes/product.route');
@@ -11,14 +12,18 @@ const productRoutes = require('./routes/product.route');
 const app = express();
 const PORT = process.env.PORT;
 
+// View Enginge config
+
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './views');
+
+// Middleware
 app.use(express.json()); // JSON parsing middleware`
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/users', userRoutes); // user route middleware
-app.use('/products', productRoutes); // product route middleware
-
 app.get('/', (req, res) => {
-	res.redirect('/products');
+	res.render('home', { title: 'Hello asadbook-dev!' });
 });
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
